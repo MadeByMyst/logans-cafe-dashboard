@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Today | Logan'sCafe dashboard</title>
+    <meta
+      name="description"
+      content="The owner's side of Logan'sCafe: today's orders, sales, the menu, stock, the rota and reviews. A concept dashboard by MadeByMyst."
+    />
+    <meta name="theme-color" content="#2a1506" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Logan'sCafe | Owner dashboard" />
+    <meta
+      property="og:description"
+      content="A concept café dashboard by MadeByMyst, built in plain HTML, CSS and JavaScript."
+    />
+    <meta
+      property="og:image"
+      content="https://madebymyst.github.io/logans-cafe-dashboard/assets/social-card.jpg"
+    />
+
+    <link rel="icon" href="assets/favicon.ico" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..600&family=Monsieur+La+Doulaise&family=Playfair+Display:ital,wght@0,500..800;1,500..700&display=swap"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+    <script src="data.js" defer></script>
+    <script src="charts.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="app">
+      <!-- SIDEBAR (a bar along the top with a menu button on small screens) -->
+      <header class="sidebar">
+        <div class="sidebar-top">
+          <a class="brand" href="#today" aria-label="Logan'sCafe dashboard, today">
+            <img src="assets/logo.webp" alt="" width="38" height="40" />
+            <span>Logan'sCafe</span>
+          </a>
+
+          <button
+            class="menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="sidebar-panel"
+          >
+            <span class="visually-hidden">Menu</span>
+            <span class="bar" aria-hidden="true"></span>
+            <span class="bar" aria-hidden="true"></span>
+            <span class="bar" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="sidebar-panel" id="sidebar-panel">
+          <nav class="side-nav" aria-label="Dashboard">
+            <span class="nav-marker" aria-hidden="true"></span>
+            <a href="#today" data-view-link="today">Today</a>
+            <a href="#orders" data-view-link="orders"
+              >Orders <span class="nav-count" data-count="orders"></span
+            ></a>
+            <a href="#sales" data-view-link="sales">Sales</a>
+            <a href="#menu" data-view-link="menu">Menu</a>
+            <a href="#stock" data-view-link="stock"
+              >Stock <span class="nav-count" data-count="stock"></span
+            ></a>
+            <a href="#rota" data-view-link="rota">Rota</a>
+            <a href="#reviews" data-view-link="reviews"
+              >Reviews <span class="nav-count" data-count="reviews"></span
+            ></a>
+          </nav>
+
+          <a class="side-special" href="#menu">
+            <img data-special-photo src="assets/menu-cold.webp" alt="" width="700" height="467" />
+            <span>
+              <span class="special-label">Today's special</span>
+              <span class="special-name" data-special-name>Vanilla Cloud Latte</span>
+              <span class="special-price" data-special-price>$5.50</span>
+            </span>
+          </a>
+
+          <div class="side-foot">
+            <p class="side-owner">Signed in as <strong>Logan</strong>, owner</p>
+            <a
+              class="side-link"
+              href="https://madebymyst.github.io/logans-cafe/"
+              target="_blank"
+              rel="noopener"
+              >View the café's website
+              <svg class="out-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5h6v6M11.5 4.5l-7 7" /></svg
+            ></a>
+          </div>
+        </div>
+      </header>
+
+      <main class="main" id="main" tabindex="-1">
+        <div class="topbar">
+          <p class="topbar-date">
+            <span data-date>Today</span> <span aria-hidden="true">·</span>
+            <span data-clock></span>
+          </p>
+          <p class="open-now" data-open-status>Open every day</p>
+        </div>
+
+        <noscript>
+          <p class="noscript">
+            The dashboard needs JavaScript to show its numbers. Turn it on and
+            reload the page.
+          </p>
+        </noscript>
+
+        <!-- TODAY -->
+        <section class="view" data-view="today" aria-labelledby="today-title">
+          <div class="view-head">
+            <h1 id="today-title" tabindex="-1" data-greeting>Hello, Logan</h1>
+            <p data-today-intro>Here's how today is going.</p>
+          </div>
+
+          <div class="kpis" data-today-kpis></div>
+
+          <div class="grid grid-today">
+            <section class="card" aria-labelledby="hourly-title">
+              <div class="card-head">
+                <div>
+                  <h2 id="hourly-title">Sales by hour</h2>
+                  <p class="card-sub" data-hourly-sub></p>
+                </div>
+                <button class="text-btn" type="button" data-table-toggle="hourly-chart">
+                  Show as table
+                </button>
+              </div>
+              <div class="legend" data-hourly-legend></div>
+              <div class="chart" id="hourly-chart"></div>
+            </section>
+
+            <section class="card queue-card" aria-labelledby="queue-title">
+              <div class="card-head">
+                <div>
+                  <h2 id="queue-title">Order queue</h2>
+                  <p class="card-sub" data-queue-sub></p>
+                </div>
+                <a class="text-btn" href="#orders">All orders</a>
+              </div>
+              <ol class="queue" data-queue></ol>
+              <p class="empty" data-queue-empty hidden></p>
+            </section>
+          </div>
+
+          <div class="grid grid-3">
+            <section class="card" aria-labelledby="top-title">
+              <div class="card-head">
+                <div>
+                  <h2 id="top-title">Selling well</h2>
+                  <p class="card-sub" data-top-sub></p>
+                </div>
+              </div>
+              <ol class="bar-list" data-top-items></ol>
+            </section>
+
+            <section class="card" aria-labelledby="shift-title">
+              <div class="card-head">
+                <div>
+                  <h2 id="shift-title">On shift today</h2>
+                  <p class="card-sub" data-shift-sub></p>
+                </div>
+                <a class="text-btn" href="#rota">Rota</a>
+              </div>
+              <ul class="plain-list shift-list" data-shifts></ul>
+            </section>
+
+            <section class="card" aria-labelledby="low-title">
+              <div class="card-head">
+                <div>
+                  <h2 id="low-title">Running low</h2>
+                  <p class="card-sub" data-low-sub></p>
+                </div>
+                <a class="text-btn" href="#stock">Stock</a>
+              </div>
+              <ul class="plain-list low-list" data-low-stock></ul>
+            </section>
+          </div>
+
+          <figure class="card latest-review" data-latest-review></figure>
+        </section>
+
+        <!-- ORDERS -->
+        <section class="view" data-view="orders" aria-labelledby="orders-title" hidden>
+          <div class="view-head">
+            <h1 id="orders-title" tabindex="-1">Orders</h1>
+            <p data-orders-intro>Everything that's come through the till today.</p>
+          </div>
+
+          <div class="filters">
+            <div class="segmented" role="group" aria-label="Show">
+              <button type="button" data-orders-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-orders-filter="waiting" aria-pressed="false">In progress</button>
+              <button type="button" data-orders-filter="done" aria-pressed="false">Collected</button>
+            </div>
+            <label class="search">
+              <span class="visually-hidden">Search orders</span>
+              <input class="field" type="search" placeholder="Search by name, item or number" data-orders-search />
+            </label>
+          </div>
+
+          <section class="card" aria-labelledby="orders-list-title">
+            <div class="card-head">
+              <div>
+                <h2 id="orders-list-title" data-orders-heading>Today's orders</h2>
+                <p class="card-sub" data-orders-summary></p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table orders-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">Order</th>
+                    <th scope="col">Items</th>
+                    <th scope="col">Eat in?</th>
+                    <th scope="col">Paid by</th>
+                    <th scope="col" class="num">Total</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody data-orders-rows></tbody>
+              </table>
+            </div>
+            <p class="empty" data-orders-empty hidden>No orders match that.</p>
+            <button class="btn more-btn" type="button" data-orders-more hidden>Show more orders</button>
+          </section>
+        </section>
+
+        <!-- SALES -->
+        <section class="view" data-view="sales" aria-labelledby="sales-title" hidden>
+          <div class="view-head">
+            <h1 id="sales-title" tabindex="-1">Sales</h1>
+            <p>How the café's been doing, day by day. Today isn't counted until it's over.</p>
+          </div>
+
+          <div class="filters">
+            <div class="segmented" role="group" aria-label="Date range">
+              <button type="button" data-sales-range="7" aria-pressed="false">Last 7 days</button>
+              <button type="button" data-sales-range="30" aria-pressed="true">Last 30 days</button>
+              <button type="button" data-sales-range="90" aria-pressed="false">Last 90 days</button>
+            </div>
+            <p class="filters-note" data-sales-dates></p>
+          </div>
+
+          <div class="kpis" data-sales-kpis></div>
+
+          <section class="card grid-gap" aria-labelledby="daily-title">
+            <div class="card-head">
+              <div>
+                <h2 id="daily-title">Sales each day</h2>
+                <p class="card-sub">The best day is labelled. Hover or tab in for the rest.</p>
+              </div>
+              <button class="text-btn" type="button" data-table-toggle="daily-chart">
+                Show as table
+              </button>
+            </div>
+            <div class="chart" id="daily-chart"></div>
+          </section>
+
+          <div class="grid grid-2">
+            <section class="card" aria-labelledby="split-title">
+              <div class="card-head">
+                <div>
+                  <h2 id="split-title">Where the money comes from</h2>
+                  <p class="card-sub">Sales by part of the menu</p>
+                </div>
+              </div>
+              <div data-sales-split></div>
+
+              <h3 class="sub-heading">How people order</h3>
+              <ul class="plain-list ratio-list" data-sales-habits></ul>
+            </section>
+
+            <section class="card" aria-labelledby="best-title">
+              <div class="card-head">
+                <div>
+                  <h2 id="best-title">Best sellers</h2>
+                  <p class="card-sub">Ranked by sales</p>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table best-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Item</th>
+                      <th scope="col" class="num">Sold</th>
+                      <th scope="col" class="num">Sales</th>
+                    </tr>
+                  </thead>
+                  <tbody data-best-rows></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <section class="card grid-gap" aria-labelledby="busy-title">
+            <div class="card-head">
+              <div>
+                <h2 id="busy-title">When it's busy</h2>
+                <p class="card-sub">Average orders in each hour, by day of the week</p>
+              </div>
+            </div>
+            <div data-heatmap></div>
+          </section>
+        </section>
+
+        <!-- MENU -->
+        <section class="view" data-view="menu" aria-labelledby="menu-title" hidden>
+          <div class="view-head">
+            <h1 id="menu-title" tabindex="-1">Menu</h1>
+            <p>
+              Change prices, mark things as sold out and pick today's special.
+              Changes save as you go.
+            </p>
+          </div>
+
+          <div class="menu-grid" data-menu></div>
+
+          <div class="menu-foot">
+            <p>
+              This is a demo, so changes are saved in this browser only. The
+              café's website keeps its own menu.
+            </p>
+            <button class="btn" type="button" data-menu-reset>Undo all changes</button>
+          </div>
+        </section>
+
+        <!-- STOCK -->
+        <section class="view" data-view="stock" aria-labelledby="stock-title" hidden>
+          <div class="view-head">
+            <h1 id="stock-title" tabindex="-1">Stock</h1>
+            <p data-stock-intro>What's on the shelves, and what to order next.</p>
+          </div>
+
+          <div class="stock-grid" data-stock></div>
+        </section>
+
+        <!-- ROTA -->
+        <section class="view" data-view="rota" aria-labelledby="rota-title" hidden>
+          <div class="view-head">
+            <h1 id="rota-title" tabindex="-1">Rota</h1>
+            <p data-rota-intro>Who's working this week.</p>
+          </div>
+
+          <section class="card" aria-labelledby="week-title">
+            <div class="card-head">
+              <div>
+                <h2 id="week-title" data-rota-week>This week</h2>
+                <p class="card-sub" data-rota-sub></p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table rota-table" data-rota></table>
+            </div>
+          </section>
+        </section>
+
+        <!-- REVIEWS -->
+        <section class="view" data-view="reviews" aria-labelledby="reviews-title" hidden>
+          <div class="view-head">
+            <h1 id="reviews-title" tabindex="-1">Reviews</h1>
+            <p>What people are saying, and the ones still waiting for a reply.</p>
+          </div>
+
+          <div class="reviews-layout">
+            <section class="card rating-card" aria-labelledby="rating-title">
+              <h2 id="rating-title">Average rating</h2>
+              <p class="rating-figure" data-rating-figure></p>
+              <p class="card-sub" data-rating-sub></p>
+              <ol class="bar-list rating-bars" data-rating-bars></ol>
+            </section>
+
+            <div class="reviews-main">
+              <div class="filters">
+                <div class="segmented" role="group" aria-label="Show">
+                  <button type="button" data-reviews-filter="all" aria-pressed="true">All</button>
+                  <button type="button" data-reviews-filter="reply" aria-pressed="false">Needs a reply</button>
+                </div>
+              </div>
+              <ul class="review-list" data-reviews></ul>
+              <p class="empty" data-reviews-empty hidden>
+                Every review has a reply. Nice work.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <footer class="main-foot">
+          <p>
+            Logan'sCafe and everything on this dashboard are made up for a
+            portfolio. A concept project by
+            <a href="https://madebymyst.github.io/">MadeByMyst (Shahab MD)</a>.
+            Photos from
+            <a href="https://unsplash.com/" target="_blank" rel="noopener">Unsplash</a>.
+          </p>
+        </footer>
+      </main>
+    </div>
+
+    <div class="toast" role="status" aria-live="polite" data-toast></div>
+  </body>
+</html>
